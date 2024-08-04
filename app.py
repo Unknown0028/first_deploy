@@ -4,7 +4,11 @@ import numpy as np
 from PIL import Image
 
 # Load the model
-model = tf.keras.models.load_model('traffic.keras')
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model('traffic.keras')
+
+model = load_model()
 
 def predict(image):
     # Preprocess the image
@@ -15,7 +19,7 @@ def predict(image):
     # Make prediction
     predictions = model.predict(image)
     predicted_class = np.argmax(predictions, axis=1)
-    return int(predicted_class[0])
+    return str(predicted_class[0])  # Convert to string for display
 
 def main():
     st.title("Traffic Signal Classifier")
